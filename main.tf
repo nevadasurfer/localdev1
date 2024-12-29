@@ -1,5 +1,19 @@
-provider "kind" {}
+terraform {
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.9.0"
+    }
+  }
+}
 
+#provider "helm" {
+#  kubernetes {
+#    config_path = "~/.kube/config" # Path to your Kubernetes config file
+#  }
+#}
+
+provider "kind" {}
 locals {
   k8s_config_path = pathexpand("~/.kube/config")
 }
@@ -23,3 +37,5 @@ resource "kind_cluster" "default" {
     }
   }
 }
+
+
