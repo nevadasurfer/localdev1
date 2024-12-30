@@ -26,7 +26,8 @@ resource "kind_cluster" "k8s" {
 # Provider for helm, connected to the kind cluster
 provider "helm" {
   kubernetes {
-    config_path = kind_cluster.k8s.kubeconfig
+    #config_path = kind_cluster.k8s.kubeconfig
+    config_path = "~/.kube/config"
   }
 }
 
