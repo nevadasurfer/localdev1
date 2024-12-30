@@ -17,9 +17,10 @@ terraform {
 # Provider for kind
 provider "kind" {}
 
-# Create a Kubernetes cluster using kind
+# Define the kind cluster with 2 worker nodes
 resource "kind_cluster" "k8s" {
-  name = "localdev1"
+  name = "my-cluster"
+
 }
 
 # Provider for helm, connected to the kind cluster
@@ -28,4 +29,7 @@ provider "helm" {
     config_path = kind_cluster.k8s.kubeconfig
   }
 }
+
+
+
 
