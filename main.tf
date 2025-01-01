@@ -32,10 +32,10 @@ resource "kind_cluster" "k8s" {
     }
 
     node {
-      role = "worker1"
+      role = "worker"
     }
     node {
-      role = "worker2"
+      role = "worker"
     }
   }
 }
