@@ -14,35 +14,19 @@ terraform {
   required_version = ">= 1.3.0"
 }
 
+# Provider for kind
+provider "kind" {}
+
+# Define the kind cluster with 2 worker nodes
 resource "kind_cluster" "k8s" {
-  name           = "localdev1"
-  node_image     = "kindest/node:v1.32.0"
-  wait_for_ready = true
+  name = "my-cluster"
 
-  kind_config {
-    kind        = "Cluster"
-    api_version = "kind.x-k8s.io/v1alpha4"
-
-    node {
-      role = "control-plane"
-      extra_port_mappings {
-        container_port = 80
-        host_port      = 80
-      }
-    }
-
-    node {
-      role = "worker1"
-    }
-    node {
-      role = "worker2"
-    }
-  }
 }
 
 # Provider for helm, connected to the kind cluster
 provider "helm" {
   kubernetes {
+    #config_path = kind_cluster.k8s.kubeconfig
     config_path = "~/.kube/config"
   }
 }
