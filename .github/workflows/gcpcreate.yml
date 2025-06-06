@@ -52,7 +52,7 @@ jobs:
           --metadata-from-file=startup-script=/tmp/startup-script.sh \
           --quiet
       env:
-        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+        GITHUB_PAT: ${{ secrets.githubpat }}
 
     - name: Wait for VM to be ready
       run: sleep 30
