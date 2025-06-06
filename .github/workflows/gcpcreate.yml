@@ -44,5 +44,15 @@ jobs:
           --tags=http-server \
           --quiet
 
+         # Clone the GitHub repo
+          git config --global credential.helper store
+          echo "https://${GITHUB_USER}:${GITHUB_PAT}@github.com" > ~/.git-credentials
+          git clone ${REPO_URL} /root/repo
+          ' \
+          --metadata-from-file=startup-script=/tmp/startup-script.sh \
+          --quiet
+      env:
+        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+
     - name: Wait for VM to be ready
       run: sleep 30
