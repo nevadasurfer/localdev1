@@ -1,0 +1,48 @@
+name: Create GCP VM and Install Docker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-vm:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_ID: k8s1-451000
+      ZONE: us-central1-a
+      INSTANCE_NAME: docker-vm
+      MACHINE_TYPE: e2-micro
+      IMAGE_FAMILY: debian-11
+      IMAGE_PROJECT: debian-cloud
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Authenticate with GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    - name: Set up gcloud CLI
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+
+    - name: Create VM Instance
+      run: |
+        gcloud compute instances create "$INSTANCE_NAME" \
+          --zone="$ZONE" \
+          --machine-type="$MACHINE_TYPE" \
+          --image-family="$IMAGE_FAMILY" \
+          --image-project="$IMAGE_PROJECT" \
+          --metadata=startup-script='#! /bin/bash
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo systemctl enable docker
+          sudo systemctl start docker' \
+          --tags=http-server \
+          --quiet
+
+    - name: Wait for VM to be ready
+      run: sleep 30
