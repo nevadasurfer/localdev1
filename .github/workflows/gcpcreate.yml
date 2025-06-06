@@ -40,11 +40,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker.io
           sudo systemctl enable docker
-          sudo systemctl start docker' \
-          --tags=http-server \
-          --quiet
+          sudo systemctl start docker
 
-         # Clone the GitHub repo
+          # Clone the GitHub repo
           git config --global credential.helper store
           echo "https://${GITHUB_USER}:${GITHUB_PAT}@github.com" > ~/.git-credentials
           git clone ${REPO_URL} /root/repo
@@ -52,7 +50,7 @@ jobs:
           --metadata-from-file=startup-script=/tmp/startup-script.sh \
           --quiet
       env:
-        GITHUB_PAT: ${{ secrets.githubpat }}
+        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
 
     - name: Wait for VM to be ready
       run: sleep 30
